@@ -1,0 +1,12 @@
+[
+    {
+      "title": "EKS Node Failure",
+      "type": "runbook",
+      "tags": [
+        "eks",
+        "kubernetes",
+        "node"
+      ],
+      "path": "knowledge/runbooks/eks-node-failure.md"
+    }
+  ]
