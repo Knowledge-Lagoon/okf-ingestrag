@@ -39,5 +39,4 @@ if __name__ == "__main__":
     results = search("grafana")
 
     for item in results:
-
         print(item["title"])
