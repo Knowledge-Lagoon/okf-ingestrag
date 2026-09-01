@@ -1,8 +1,7 @@
 from app.search.engine import SearchEngine
 
-
-def search(query):
+def search(query, doc_type=None):
 
     engine = SearchEngine()
 
-    return engine.search(query)
+    return engine.search(query, doc_type)

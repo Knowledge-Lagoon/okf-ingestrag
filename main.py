@@ -4,6 +4,9 @@ from app.okf.validator import OKFValidator
 from app.catalog.generator import CatalogGenerator
 from app.search.service import search
 
+from app.router.router import QueryRouter
+from app.search.service import search
+
 
 def scan_documents():
 
@@ -28,15 +31,29 @@ def scan_documents():
 
 if __name__ == "__main__":
 
-    scan_documents()
+    # Uncomment or add functionality here
+    # scan_documents()
 
-    catalog = CatalogGenerator.generate()
+    # catalog = CatalogGenerator.generate()
 
-    print(f"Catalog generated with {len(catalog)} entries")
-    print("\nSearch Results\n")
+    # print(f"Catalog generated with {len(catalog)} entries")
+    # print("\nSearch Results\n")
 
-    #results = search("kubernetes")
-    results = search("grafana")
+    # #results = search("kubernetes")
+    # results = search("grafana")
+
+    # for item in results:
+
+    #     print(item["title"])
+    
+
+    question = "How do I restart Kong?"
+
+    route = QueryRouter.route(question)
+
+    print(f"Route: {route}")
+
+    results = search("kong", route)
 
     for item in results:
         print(item["title"])
