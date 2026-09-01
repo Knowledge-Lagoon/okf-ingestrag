@@ -3,9 +3,8 @@ from pathlib import Path
 from app.okf.validator import OKFValidator
 from app.catalog.generator import CatalogGenerator
 from app.search.service import search
-
 from app.router.router import QueryRouter
-from app.search.service import search
+from app.retrieval.retriever import DocumentRetriever
 
 
 def scan_documents():
@@ -31,29 +30,45 @@ def scan_documents():
 
 if __name__ == "__main__":
 
-    # Uncomment or add functionality here
-    # scan_documents()
+    # Step 1: Validate documents
+    scan_documents()
 
-    # catalog = CatalogGenerator.generate()
+    # Step 2: Generate catalog
+    catalog = CatalogGenerator.generate()
 
-    # print(f"Catalog generated with {len(catalog)} entries")
-    # print("\nSearch Results\n")
+    print(f"Catalog generated with {len(catalog)} entries\n")
 
-    # #results = search("kubernetes")
-    # results = search("grafana")
-
-    # for item in results:
-
-    #     print(item["title"])
-    
-
+    # Step 3: User question
     question = "How do I restart Kong?"
 
+    # Step 4: Route query
     route = QueryRouter.route(question)
 
     print(f"Route: {route}")
 
+    # Step 5: Search
     results = search("kong", route)
+
+    if not results:
+        print("No documents found")
+        exit()
+
+    # Step 6: Display results
+    print("\nSearch Results\n")
 
     for item in results:
         print(item["title"])
+
+    # Step 7: Retrieve first matching document
+    doc = results[0]
+
+    print("\nDocument Selected:\n")
+    print(doc["title"])
+
+    print("\nDocument Content:\n")
+
+    print(
+        DocumentRetriever.get_content(
+            doc["path"]
+        )
+    )        
