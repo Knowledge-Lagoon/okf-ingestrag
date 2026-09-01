@@ -23,6 +23,9 @@ class SearchEngine:
             if query in doc["type"].lower():
                 results.append(doc)
                 continue
+            if query in doc["content"].lower():
+                results.append(doc)
+                continue
 
             for tag in doc["tags"]:
 

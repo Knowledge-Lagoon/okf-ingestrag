@@ -18,6 +18,7 @@ class CatalogGenerator:
             if result["status"] == "VALID":
 
                 metadata = OKFValidator.extract_metadata(str(file))
+                content = Path(file).read_text(encoding="utf-8")
 
                 catalog.append(
                     {
@@ -26,7 +27,8 @@ class CatalogGenerator:
                         "description": metadata["description"],
                         "tags": metadata["tags"],
                         "owner": metadata["owner"],
-                        "path": str(file)
+                        "path": str(file),
+                        "content": content
                     }
                 )
 

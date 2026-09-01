@@ -35,7 +35,8 @@ if __name__ == "__main__":
     print(f"Catalog generated with {len(catalog)} entries")
     print("\nSearch Results\n")
 
-    results = search("kubernetes")
+    #results = search("kubernetes")
+    results = search("grafana")
 
     for item in results:
 
