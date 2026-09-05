@@ -2,9 +2,10 @@ from pathlib import Path
 
 from app.okf.validator import OKFValidator
 from app.catalog.generator import CatalogGenerator
-from app.search.service import search
 from app.router.router import QueryRouter
+from app.search.service import search
 from app.retrieval.retriever import DocumentRetriever
+from app.assistant.knowledge_assistant import KnowledgeAssistant
 
 
 def scan_documents():
@@ -38,40 +39,55 @@ if __name__ == "__main__":
 
     print(f"Catalog generated with {len(catalog)} entries\n")
 
-    # Step 3: User question
+    # Step 3: Ask a question
     question = "How do I restart Kong?"
 
-    # Step 4: Route query
+    print(f"Question: {question}\n")
+
+    # Step 4: Route question
     route = QueryRouter.route(question)
 
-    print(f"Route: {route}")
+    print(f"Route: {route}\n")
 
     # Step 5: Search
     results = search("kong", route)
 
     if not results:
-        print("No documents found")
+        print("No matching documents found")
         exit()
 
-    # Step 6: Display results
-    print("\nSearch Results\n")
+    # Step 6: Show ranked results
+    print("Search Results\n")
 
     for item in results:
+
         print(
             f"{item['title']} "
             f"(score={item['score']})"
         )
 
-    # Step 7: Retrieve first matching document
+    # Step 7: Select best match
     doc = results[0]
 
-    print("\nDocument Selected:\n")
+    print("\nBest Match\n")
+
     print(doc["title"])
 
-    print("\nDocument Content:\n")
+    # Step 8: Retrieve document
+    content = DocumentRetriever.get_content(
+        doc["path"]
+    )
 
-    print(
-        DocumentRetriever.get_content(
-            doc["path"]
-        )
-    )        
+    # Step 9: Build assistant response
+    answer = KnowledgeAssistant.build_response(
+        question,
+        doc
+    )
+
+    print("\nKnowledge Assistant Response\n")
+
+    print(answer)
+
+    print("\nDocument Source\n")
+
+    print(doc["path"])
