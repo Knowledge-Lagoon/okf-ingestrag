@@ -1,4 +1,13 @@
 import os
+import sys
+from pathlib import Path
+
+project_root = Path(__file__).resolve().parent.parent
+
+sys.path.insert(
+    0,
+    str(project_root)
+)
 
 from app.connectors.confluence_connector import (
     ConfluenceConnector
@@ -7,10 +16,17 @@ from app.connectors.confluence_connector import (
 
 BASE_URL = "https://knowledge-lagoon.atlassian.net"
 
-USERNAME = os.getenv("CONFLUENCE_USERNAME")
-API_TOKEN = os.getenv("CONFLUENCE_API_TOKEN")
+USERNAME = os.getenv(
+    "CONFLUENCE_USERNAME"
+)
 
-PAGE_ID = os.getenv("CONFLUENCE_PAGE_ID")
+API_TOKEN = os.getenv(
+    "CONFLUENCE_API_TOKEN"
+)
+
+PAGE_ID = os.getenv(
+    "CONFLUENCE_PAGE_ID"
+)
 
 
 def main():
@@ -36,18 +52,29 @@ def main():
         api_token=API_TOKEN
     )
 
-    print("Connecting to Confluence...")
+    print(
+        "Connecting to Confluence..."
+    )
 
-    page = connector.get_page(PAGE_ID)
+    page = connector.get_page(
+        PAGE_ID
+    )
 
-    print("\nPage Retrieved Successfully\n")
+    print(
+        "\nPage Retrieved Successfully\n"
+    )
 
-    print(f"ID: {page['id']}")
-    print(f"Title: {page['title']}")
-    print(f"Type: {page['type']}")
+    print(
+        f"ID: {page['id']}"
+    )
 
-    if "body" in page:
-        print("\nContent retrieved")
+    print(
+        f"Title: {page['title']}"
+    )
+
+    print(
+        f"Type: {page['type']}"
+    )
 
 
 if __name__ == "__main__":
