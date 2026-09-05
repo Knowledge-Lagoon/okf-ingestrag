@@ -37,17 +37,16 @@ def scan_documents():
 
 if __name__ == "__main__":
 
-    # Step 1 - Validate knowledge documents
+    # Validate documents
     scan_documents()
 
-    # Step 2 - Generate catalog
+    # Generate catalog
     catalog = CatalogGenerator.generate()
-
     print(
         f"Catalog generated with {len(catalog)} entries\n"
     )
 
-    # Step 3 - Ask user question
+    # User question
     question = input(
         "\nAsk a question: "
     ).strip()
@@ -57,88 +56,24 @@ if __name__ == "__main__":
         exit()
 
     print(f"\nQuestion: {question}")
+    # Extract keywords
+    keywords = KeywordExtractor.extract(
+        question
+    )
 
-    # Step 4 - Extract keyword
     keyword = KeywordExtractor.primary_keyword(
         question
     )
 
-    print(f"Keyword: {keyword}")
+    print(f"Keywords: {keywords}")
+    print(f"Primary Keyword: {keyword}")
 
-    # Step 5 - Route question
+    # Route query
     route = QueryRouter.route(question)
 
     print(f"Route: {route}")
 
-    # Step 6 - Search
+    # Search
     results = search(
-        keyword,
-        route
+        keyword
     )
-
-    if not results:
-        print(
-            "\nNo matching documents found."
-        )
-        exit()
-
-    print("\nSearch Results\n")
-
-    for item in results:
-
-        print(
-            f"{item['title']} "
-            f"(score={item['score']})"
-        )
-
-    # Step 7 - Select top 3 documents
-    top_docs = results[:3]
-
-    combined_content = ""
-
-    print("\nDocuments Used\n")
-
-    for doc in top_docs:
-
-        print(
-            f"- {doc['title']} "
-            f"({doc['path']})"
-        )
-
-        combined_content += (
-            f"\n\n=== {doc['title']} ===\n\n"
-        )
-
-        combined_content += (
-            DocumentRetriever.get_content(
-                doc["path"]
-            )
-        )
-
-    # Step 8 - Build prompt
-    prompt = PromptBuilder.build(
-        question,
-        combined_content
-    )
-
-    # Step 9 - Query Ollama
-    ollama_service = OllamaService()
-
-    response = ollama_service.ask(
-        prompt
-    )
-
-    # Step 10 - Display AI response
-    print("\nAI Response\n")
-
-    print(response)
-
-    # Step 11 - Show source documents
-    print("\nSource Documents\n")
-
-    for doc in top_docs:
-
-        print(
-            f"- {doc['title']} "
-            f"({doc['path']})"
-        )

@@ -50,4 +50,4 @@ class KeywordExtractor:
         if not keywords:
             return ""
 
-        return keywords
+        return keywords[-1]
