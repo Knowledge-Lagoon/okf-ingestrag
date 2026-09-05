@@ -5,7 +5,7 @@ class OllamaService:
 
     def __init__(
         self,
-        host="http://13.210.36.161:11434",
+        host="http://172.31.15.13:11434",
         model="phi3"
     ):
         self.host = host
