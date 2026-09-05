@@ -4,11 +4,9 @@ from pathlib import Path
 class ConfluenceImporter:
 
     @staticmethod
-    def save_page(
-        title,
-        content,
-        output_dir="knowledge/confluence"
-    ):
+    def save_page(page):
+
+        output_dir = "knowledge/confluence"
 
         Path(output_dir).mkdir(
             parents=True,
@@ -16,7 +14,8 @@ class ConfluenceImporter:
         )
 
         filename = (
-            title.lower()
+            page["title"]
+            .lower()
             .replace(" ", "-")
             .replace("/", "-")
         )
@@ -31,6 +30,6 @@ class ConfluenceImporter:
             encoding="utf-8"
         ) as f:
 
-            f.write(content)
+            f.write(page["content"])
 
         return file_path
