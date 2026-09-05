@@ -1,12 +1,66 @@
 [
     {
-      "title": "EKS Node Failure",
-      "type": "runbook",
-      "tags": [
-        "eks",
-        "kubernetes",
-        "node"
-      ],
-      "path": "knowledge/runbooks/eks-node-failure.md"
+        "title": "Kubernetes Pod Troubleshooting",
+        "type": "reference",
+        "description": "Common troubleshooting steps for Kubernetes pod failures",
+        "tags": [
+            "kubernetes",
+            "pod",
+            "troubleshooting"
+        ],
+        "owner": "devops",
+        "path": "knowledge/kubernetes/pod-troubleshooting.md",
+        "content": "---\ntype: reference\ntitle: Kubernetes Pod Troubleshooting\ndescription: Common troubleshooting steps for Kubernetes pod failures\ntags:\n  - kubernetes\n  - pod\n  - troubleshooting\nowner: devops\nversion: 1.0\n---\n\n# Kubernetes Pod Troubleshooting\n\n## CrashLoopBackOff\n\nCheck pod logs:\n\n```bash\nkubectl logs <pod-name>\n```\n\nDescribe the pod:\n\n```bash\nkubectl describe pod <pod-name>\n```\n\nCommon causes:\n\n- Application startup failure\n- Missing environment variables\n- Configuration errors\n\n---\n\n## ImagePullBackOff\n\nDescribe the pod:\n\n```bash\nkubectl describe pod <pod-name>\n```\n\nVerify image exists:\n\n- Image repository\n- Image tag\n- Registry access permissions\n\n---\n\n## Pending Pods\n\nCheck pod details:\n\n```bash\nkubectl describe pod <pod-name>\n```\n\nCommon causes:\n\n- Insufficient CPU\n- Insufficient memory\n- Node selectors\n- Taints and tolerations\n\n---\n\n## Pod Status Overview\n\nList all pods:\n\n```bash\nkubectl get pods -A\n```\n\nList pods with node assignment:\n\n```bash\nkubectl get pods -A -o wide\n```\n\nCheck cluster events:\n\n```bash\nkubectl get events -A --sort-by=.metadata.creationTimestamp\n```\n``"
+    },
+    {
+        "title": "EKS Node Failure",
+        "type": "runbook",
+        "description": "Troubleshooting failed EKS worker nodes",
+        "tags": [
+            "eks",
+            "kubernetes",
+            "node"
+        ],
+        "owner": "devops",
+        "path": "knowledge/runbooks/eks-node-failure.md",
+        "content": "---\ntype: runbook\ntitle: EKS Node Failure\ndescription: Troubleshooting failed EKS worker nodes\ntags:\n  - eks\n  - kubernetes\n  - node\nowner: devops\nversion: 1.0\n---\n\n# EKS Node Failure\n\n## Symptoms\n\n- Nodes not ready\n- Pods stuck in Pending\n- Cluster autoscaler not scaling\n\n## Investigation\n\n1. Check node status\n\n```bash\nkubectl get nodes"
+    },
+    {
+        "title": "Kong Restart",
+        "type": "runbook",
+        "description": "Procedure to restart Kong deployment in Kubernetes",
+        "tags": [
+            "kong",
+            "restart",
+            "kubernetes"
+        ],
+        "owner": "devops",
+        "path": "knowledge/runbooks/kong-restart.md",
+        "content": "---\ntype: runbook\ntitle: Kong Restart\ndescription: Procedure to restart Kong deployment in Kubernetes\ntags:\n  - kong\n  - restart\n  - kubernetes\nowner: devops\nversion: 1.0\n---\n\n# Kong Restart\n\n## Restart Deployment\n\n```bash\nkubectl rollout restart deployment kong -n kong"
+    },
+    {
+        "title": "ImagePullBackOff Recovery",
+        "type": "runbook",
+        "description": "Troubleshooting image pull failures",
+        "tags": [
+            "kubernetes",
+            "imagepullbackoff"
+        ],
+        "owner": "devops",
+        "path": "knowledge/runbooks/imagepullbackoff.md",
+        "content": "---\ntype: runbook\ntitle: ImagePullBackOff Recovery\ndescription: Troubleshooting image pull failures\ntags:\n  - kubernetes\n  - imagepullbackoff\nowner: devops\nversion: 1.0\n---"
+    },
+    {
+        "title": "Kong API Gateway",
+        "type": "service",
+        "description": "Service catalog entry for Kong API Gateway",
+        "tags": [
+            "kong",
+            "api-gateway",
+            "ingress"
+        ],
+        "owner": "platform-team",
+        "path": "knowledge/services/kong-service.md",
+        "content": "---\ntype: service\ntitle: Kong API Gateway\ndescription: Service catalog entry for Kong API Gateway\ntags:\n  - kong\n  - api-gateway\n  - ingress\nowner: platform-team\nversion: 1.0\n---\n\n# Kong API Gateway\n\n## Purpose\n\nKong provides API gateway and ingress capabilities for applications running on Kubernetes.\n\n## Dependencies\n\n- Amazon EKS\n- Route53\n- ACM Certificates\n\n## Related Runbooks\n\n- Kong Restart\n- Kong Upgrade\n- Kong Troubleshooting\n\n## Monitoring\n\n- Prometheus\n- Grafana\n\n## Key Commands\n\nCheck Kong pods:\n\n```bash\nkubectl get pods -n kong\n```\n\nView Kong logs:\n\n```bash\nkubectl logs -n kong <pod-name>\n```\n\nRestart Kong deployment:\n\n```bash\nkubectl rollout restart deployment kong -n kong\n```"
     }
-  ]
+]
