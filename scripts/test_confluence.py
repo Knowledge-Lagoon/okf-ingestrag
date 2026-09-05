@@ -1,10 +1,15 @@
+print("STARTING TEST SCRIPT")
+
 import os
 import sys
 from pathlib import Path
-print("STARTING TEST SCRIPT")
+
 project_root = Path(__file__).resolve().parent.parent
 
-sys.path.insert(0, str(project_root))
+sys.path.insert(
+    0,
+    str(project_root)
+)
 
 from app.connectors.confluence_connector import (
     ConfluenceConnector
@@ -49,7 +54,32 @@ def main():
     print(f"ID: {page['id']}")
     print(f"Title: {page['title']}")
 
+    print("\nPage Keys:")
+    print(page.keys())
+
+    if "content" in page:
+        print(
+            f"\nContent Length: "
+            f"{len(page['content'])}"
+        )
+
     print("\nSaving page...\n")
 
+    file_path = ConfluenceImporter.save_page(
+        page
+    )
+
+    print(
+        f"\nSaved to: {file_path}"
+    )
+
+    print(
+        f"File Exists: "
+        f"{Path(file_path).exists()}"
+    )
+
+    print("\nDone")
+
+
 if __name__ == "__main__":
-    main()    
+    main()

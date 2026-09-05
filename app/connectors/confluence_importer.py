@@ -8,6 +8,8 @@ class ConfluenceImporter:
 
         output_dir = "knowledge/confluence"
 
+        print("DEBUG: Creating output directory")
+
         Path(output_dir).mkdir(
             parents=True,
             exist_ok=True
@@ -24,6 +26,8 @@ class ConfluenceImporter:
             f"{output_dir}/{filename}.md"
         )
 
+        print(f"DEBUG: Writing file: {file_path}")
+
         with open(
             file_path,
             "w",
@@ -31,5 +35,7 @@ class ConfluenceImporter:
         ) as f:
 
             f.write(page["content"])
+
+        print("DEBUG: File write completed")
 
         return file_path
