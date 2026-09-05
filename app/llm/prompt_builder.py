@@ -1,12 +1,15 @@
 class PromptBuilder:
 
     @staticmethod
-    def build(question, document_content):
+    def build(
+        question: str,
+        document_content: str
+    ):
 
         return f"""
 You are a DevOps Knowledge Assistant.
 
-Use ONLY the supplied document.
+Answer ONLY using the supplied knowledge.
 
 Question:
 {question}

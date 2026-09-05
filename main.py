@@ -10,6 +10,7 @@ from app.llm.prompt_builder import PromptBuilder
 from app.llm.ollama_service import OllamaService
 
 
+
 def scan_documents():
 
     files = list(Path("knowledge").rglob("*.md"))
@@ -81,14 +82,22 @@ if __name__ == "__main__":
     )
 
     # Step 9: Build assistant response
-    answer = KnowledgeAssistant.build_response(
+    content = DocumentRetriever.get_content(
+        doc["path"]
+    )
+    prompt = PromptBuilder.build(
         question,
-        doc
+        content
+    )
+    ollama_service = OllamaService()
+    response = ollama_service.ask(
+        prompt
     )
 
-    print("\nKnowledge Assistant Response\n")
 
-    print(answer)
+    pprint("\nAI Response\n")
+
+    print(response)
 
     print("\nDocument Source\n")
 
