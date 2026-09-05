@@ -1,38 +1,32 @@
-import os
-import ollama
+# app/llm/ollama_service.py
+
+import requests
 
 
 class OllamaService:
 
     def __init__(
         self,
-        model: str | None = None,
-        host: str | None = None
+        host="http://172.31.15.13:11434",
+        model="phi3:mini"
     ):
-        self.model = model or os.getenv(
-            "OLLAMA_MODEL",
-            "phi3:mini"
+        self.host = host
+        self.model = model
+
+    def ask(self, prompt: str):
+
+        payload = {
+            "model": self.model,
+            "prompt": prompt,
+            "stream": False
+        }
+
+        response = requests.post(
+            f"{self.host}/api/generate",
+            json=payload,
+            timeout=120
         )
 
-        self.host = host or os.getenv(
-            "OLLAMA_HOST",
-            "http://172.31.15.13:11434"
-        )
+        response.raise_for_status()
 
-        self.client = ollama.Client(
-            host=self.host
-        )
-
-    def ask(self, prompt: str) -> str:
-
-        response = self.client.chat(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
-
-        return response["message"]["content"]
+        return response.json()["response"]
