@@ -26,9 +26,21 @@ class ConfluenceConnector:
 
         response = requests.get(
             url,
-            auth=self.auth
+            auth=self.auth,
+            timeout=60
         )
 
         response.raise_for_status()
 
         return response.json()
+
+    def get_page_content(self, page_id):
+
+        data = self.get_page(page_id)
+
+        return {
+            "id": data["id"],
+            "title": data["title"],
+            "type": data["type"],
+            "content": data["body"]["storage"]["value"]
+        }
