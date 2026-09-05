@@ -2,13 +2,16 @@ from pathlib import Path
 
 from app.okf.validator import OKFValidator
 from app.catalog.generator import CatalogGenerator
+
 from app.router.router import QueryRouter
+from app.router.keyword_extractor import KeywordExtractor
+
 from app.search.service import search
+
 from app.retrieval.retriever import DocumentRetriever
-from app.assistant.knowledge_assistant import KnowledgeAssistant
+
 from app.llm.prompt_builder import PromptBuilder
 from app.llm.ollama_service import OllamaService
-
 
 
 def scan_documents():
@@ -34,33 +37,52 @@ def scan_documents():
 
 if __name__ == "__main__":
 
-    # Step 1: Validate documents
+    # Step 1 - Validate knowledge documents
     scan_documents()
 
-    # Step 2: Generate catalog
+    # Step 2 - Generate catalog
     catalog = CatalogGenerator.generate()
 
-    print(f"Catalog generated with {len(catalog)} entries\n")
+    print(
+        f"Catalog generated with {len(catalog)} entries\n"
+    )
 
-    # Step 3: Ask a question
-    question = "How do I restart Kong?"
+    # Step 3 - Ask user question
+    question = input(
+        "\nAsk a question: "
+    ).strip()
 
-    print(f"Question: {question}\n")
-
-    # Step 4: Route question
-    route = QueryRouter.route(question)
-
-    print(f"Route: {route}\n")
-
-    # Step 5: Search
-    results = search("kong", route)
-
-    if not results:
-        print("No matching documents found")
+    if not question:
+        print("Question cannot be empty")
         exit()
 
-    # Step 6: Show ranked results
-    print("Search Results\n")
+    print(f"\nQuestion: {question}")
+
+    # Step 4 - Extract keyword
+    keyword = KeywordExtractor.primary_keyword(
+        question
+    )
+
+    print(f"Keyword: {keyword}")
+
+    # Step 5 - Route question
+    route = QueryRouter.route(question)
+
+    print(f"Route: {route}")
+
+    # Step 6 - Search
+    results = search(
+        keyword,
+        route
+    )
+
+    if not results:
+        print(
+            "\nNo matching documents found."
+        )
+        exit()
+
+    print("\nSearch Results\n")
 
     for item in results:
 
@@ -69,36 +91,54 @@ if __name__ == "__main__":
             f"(score={item['score']})"
         )
 
-    # Step 7: Select best match
-    doc = results[0]
+    # Step 7 - Select top 3 documents
+    top_docs = results[:3]
 
-    print("\nBest Match\n")
+    combined_content = ""
 
-    print(doc["title"])
+    print("\nDocuments Used\n")
 
-    # Step 8: Retrieve document
-    content = DocumentRetriever.get_content(
-        doc["path"]
-    )
+    for doc in top_docs:
 
-    # Step 9: Build assistant response
-    content = DocumentRetriever.get_content(
-        doc["path"]
-    )
+        print(
+            f"- {doc['title']} "
+            f"({doc['path']})"
+        )
+
+        combined_content += (
+            f"\n\n=== {doc['title']} ===\n\n"
+        )
+
+        combined_content += (
+            DocumentRetriever.get_content(
+                doc["path"]
+            )
+        )
+
+    # Step 8 - Build prompt
     prompt = PromptBuilder.build(
         question,
-        content
+        combined_content
     )
+
+    # Step 9 - Query Ollama
     ollama_service = OllamaService()
+
     response = ollama_service.ask(
         prompt
     )
 
-
+    # Step 10 - Display AI response
     print("\nAI Response\n")
 
     print(response)
 
-    print("\nDocument Source\n")
+    # Step 11 - Show source documents
+    print("\nSource Documents\n")
 
-    print(doc["path"])
+    for doc in top_docs:
+
+        print(
+            f"- {doc['title']} "
+            f"({doc['path']})"
+        )
