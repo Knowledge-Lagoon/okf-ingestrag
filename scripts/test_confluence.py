@@ -65,6 +65,16 @@ def main():
 
     print("\nSaving page...\n")
 
+    print("Page keys:")
+    print(page.keys())
+
+    print("\nContent length:")
+
+    if "content" in page:
+       print(len(page["content"]))
+    else:
+        print("CONTENT")
+
     file_path = ConfluenceImporter.save_page(
         page
     )
