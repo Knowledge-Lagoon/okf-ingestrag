@@ -72,8 +72,16 @@ if __name__ == "__main__":
     route = QueryRouter.route(question)
 
     print(f"Route: {route}")
+    print("DEBUG: Starting search...")
 
     # Search
     results = search(
         keyword
     )
+    results = search(
+        keyword,
+        route
+    )
+
+    print("DEBUG: Search completed")
+    print(f"DEBUG: Found {len(results)} results")
