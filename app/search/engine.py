@@ -1,4 +1,5 @@
 import json
+from app.search.ranker import SearchRanker
 
 
 class SearchEngine:
@@ -49,4 +50,4 @@ class SearchEngine:
                 if doc not in results:
                     results.append(doc)
 
-        return results
+        return SearchRanker.rank(results, query)

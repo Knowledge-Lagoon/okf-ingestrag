@@ -57,7 +57,10 @@ if __name__ == "__main__":
     print("\nSearch Results\n")
 
     for item in results:
-        print(item["title"])
+        print(
+            f"{item['title']} "
+            f"(score={item['score']})"
+        )
 
     # Step 7: Retrieve first matching document
     doc = results[0]
