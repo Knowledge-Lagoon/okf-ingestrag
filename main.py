@@ -95,7 +95,7 @@ if __name__ == "__main__":
     )
 
 
-    pprint("\nAI Response\n")
+    print("\nAI Response\n")
 
     print(response)
 
