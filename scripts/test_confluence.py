@@ -2,16 +2,16 @@ import os
 import sys
 from pathlib import Path
 
-
 project_root = Path(__file__).resolve().parent.parent
 
-sys.path.insert(
-    0,
-    str(project_root)
-)
+sys.path.insert(0, str(project_root))
 
 from app.connectors.confluence_connector import (
     ConfluenceConnector
+)
+
+from app.connectors.confluence_importer import (
+    ConfluenceImporter
 )
 
 
@@ -26,26 +26,27 @@ API_TOKEN = os.getenv(
 )
 
 PAGE_ID = os.getenv(
-    "CONFLUENCE_PAGE"
+    "CONFLUENCE_PAGE_ID"
 )
 
-page = connector.get_page_content(PAGE_ID)
 
-print("\nPage Retrieved Successfully\n")
+def main():
 
-print(f"ID: {page['id']}")
-print(f"Title: {page['title']}")
+    connector = ConfluenceConnector(
+        base_url=BASE_URL,
+        username=USERNAME,
+        api_token=API_TOKEN
+    )
 
-from app.connectors.confluence_importer import (
-    ConfluenceImporter
-)
+    print("Connecting to Confluence...")
 
-file_path = ConfluenceImporter.save_page(page)
+    page = connector.get_page_content(
+        PAGE_ID
+    )
 
-print(f"\nSaved to: {file_path}")
+    print("\nPage Retrieved Successfully\n")
 
-print("\nFile exists?")
+    print(f"ID: {page['id']}")
+    print(f"Title: {page['title']}")
 
-from pathlib import Path
-
-print(Path(file_path).exists())
+    print("\nSaving page...\n")
