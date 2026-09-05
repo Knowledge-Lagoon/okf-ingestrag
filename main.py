@@ -6,6 +6,8 @@ from app.router.router import QueryRouter
 from app.search.service import search
 from app.retrieval.retriever import DocumentRetriever
 from app.assistant.knowledge_assistant import KnowledgeAssistant
+from app.llm.prompt_builder import PromptBuilder
+from app.llm.ollama_service import OllamaService
 
 
 def scan_documents():
