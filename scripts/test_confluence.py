@@ -28,3 +28,24 @@ API_TOKEN = os.getenv(
 PAGE_ID = os.getenv(
     "CONFLUENCE_PAGE"
 )
+
+page = connector.get_page_content(PAGE_ID)
+
+print("\nPage Retrieved Successfully\n")
+
+print(f"ID: {page['id']}")
+print(f"Title: {page['title']}")
+
+from app.connectors.confluence_importer import (
+    ConfluenceImporter
+)
+
+file_path = ConfluenceImporter.save_page(page)
+
+print(f"\nSaved to: {file_path}")
+
+print("\nFile exists?")
+
+from pathlib import Path
+
+print(Path(file_path).exists())
