@@ -8,7 +8,9 @@ class ConfluenceOKFConverter:
 
         input_path = Path(input_file)
 
-        title = input_path.stem.replace("-", " ").title()
+        title = input_path.stem.replace(
+            "-", " "
+        ).title()
 
         content = input_path.read_text(
             encoding="utf-8"
