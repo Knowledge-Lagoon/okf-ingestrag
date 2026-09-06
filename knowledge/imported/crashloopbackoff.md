@@ -1,0 +1,31 @@
+---
+type: runbook
+title: Crashloopbackoff
+description: Imported from Confluence
+tags:
+  - confluence
+  - imported
+owner: confluence-import
+source: confluence
+version: 1.0
+---
+
+<h1>CrashLoopBackOff</h1>
+<pre>Runbook Title: Operational Runbook - Pod CrashLoopBackOff due to Unstable Database Connection in Kubernetes Cluster  
+Symptoms: The pod repeatedly enters a state of 'CrashLoopBackOff' indicating that the application inside cannot sustain its operation and is restarting constantly. This suggests intermittent connection failures between our services, potentially affecting database transactions or real-time data updates vital for live management systems during chaos experiments.
+Business Impact: Unknown - We require historical failure rates against service reliability metrics to quantify the exact business impact on uptime and performance standards before we can fully understand this incident's repercussions within our operational parameters. However, any prolonged disruption could lead to significant negative consequences for user experience or real-time data integrity in live services management scenarios where up-to-date information is critical.
+Root Cause: Unstable database connection - This root cause points towards an underlying problem with either the internal network stability within Kubernetes networking configurations, misconfigurations of Persistent Volumes (PVs), or persistent volume claims (PVCs) and related StatefulSet/Deployment setups that are essential for maintaining stable pod-to-service communication in a chaos engineering context.
+Resolution Steps: 
+1. Action #1 involves employing network diagnostic tools such as `ping` and `traceroute/tracert`, to pinpoint if connectivity issues arise from specific hops within the Kubernetes networking infrastructure or extend beyond, potentially implicating broader service failures not just limited to pod-database interaction.
+2. Action #2 mandates a thorough review of all kube-system and non-kube system configurations pertinent to database connectivity such as PVs/PVCs specifications, StatefulSet details for Persistent Volumes (if necessary), Deployment descriptions ensuring no misconfigurations are leading the pod into 'CrashLoopBackOff' condition. Verify DNS resolution and Service discovery mechanisms between relevant Kubernetes Services that represent database instances within kube-system namespace as assumed to be a managed Postgres service, along with inspecting for typos or errors in YAML configuration files defining Pod specifications which might lead incorrect connection strings/image names being deployed into the environment.
+3. Action #3 directs us towards investigating potential scaling issues due to pod constraints when using resource quotas and limits by invoking `kubectl describe` on relevant resources, checking for misconfigurations or provisioning errors which could be contributing factors in CrashLoopBackOff behavior during service scale demands.
+4. Action #4 implies ensuring that the Service type is correctly specified with necessary annotations when deploying a self-hosted Postgres database inside Kubernetes but not part of kube system, asserting proper load balancing configurations and verifying chart version compatibility between Helm charts versions being used against current deployment to rule out potential incompatibilities during rollouts.
+5. Action #5 involves the utilization of `kubectl describe pod` coupled with container logs command such as 'docker ps -qa | xargs docker exec  kc logtail --follow' for a deeper understanding, allowing us to review any runtime application errors that could be contributing towards CrashLoopBackOff behavior.
+6. Action #6 commands the inspection of recent changes within cluster configuration or Ingress controllers which might impact connectivity between services - employing 'kubectl get events', and exploring Kubernetes API server logs, if accessible around time frame when issues arose to uncover any misconfigurations such as AZusm/AWS related anomalies.
+Validation Checks: Post-resolution monitoring of pod health status using `kubectl describe`, confirming that the 'CrashLoopBackOff' issue has been effectively mitigated by observing if it persists, and ensuring no new symptoms have emerged post resolution steps implementation for sustained service reliability.
+Escalation Path: In case of unresolved issues or discrepancies encountered during investigation procedures - escalate to experienced Site Reliability Engineers within respective teams (DevOps/Development, Infra Operations) and Database Administration groups with specialized knowledge in Kubernetes configurations for a detailed review. Further assistance can be sought from Cloud Provider's support if dealing with managed services; this will help rule out service-specific issues or infrastructure misconfigur085bns related to AZusm/AWS, potentially causing intermittent database connection failures in Kubernetes clusters hosting the application.
+References:  
+Incident Type - Pod CrashLoopBackOff due to Unstable Database Connection  
+- Reliability Engineering Best Practices for Troubleshooting with Kubebuilders (https://kubebuilders.com/bestpractices/)
+- Kubernetes Networking and DNS Resolution Guide (https://k8s.io/docs/concepts/network/#dns)  
+Root Cause Analysis Framework: This runbook follows the structured RCA approach which involves understanding symptoms, assessing business impact potential before diving into technical investigation procedures for resolving root causes with validation checks and an escalation path if issues persist or are beyond initial scope resolution capabilities.</pre>
