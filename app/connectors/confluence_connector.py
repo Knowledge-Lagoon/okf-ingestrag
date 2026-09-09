@@ -44,3 +44,28 @@ class ConfluenceConnector:
             "type": data["type"],
             "content": data["body"]["storage"]["value"]
         }
+        
+    def get_space_pages(self, space_key):
+
+        url = (
+            f"{self.base_url}"
+            f"/wiki/rest/api/content"
+        )
+
+        params = {
+            "spaceKey": space_key,
+            "limit": 100
+        }
+
+        response = requests.get(
+            url,
+            auth=self.auth,
+            params=params
+        )
+
+        response.raise_for_status()
+
+        data = response.json()
+
+        return data["results"]
+    

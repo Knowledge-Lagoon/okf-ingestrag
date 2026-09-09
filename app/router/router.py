@@ -28,4 +28,4 @@ class QueryRouter:
             if keyword in query:
                 return "service"
 
-        return "general"
+        return None
