@@ -71,6 +71,14 @@ def main():
             )
         )
 
+
+
+        raw_file = (
+            ConfluenceImporter.save_page(
+                content_page
+            )
+        )
+
         okf_file = (
             ConfluenceOKFConverter.convert(
                 raw_file
