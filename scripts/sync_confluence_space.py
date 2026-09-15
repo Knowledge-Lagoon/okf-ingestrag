@@ -49,12 +49,12 @@ API_TOKEN = os.getenv(
 
 
 def main():
-
+    print("LOADING SCRIPT")
     if not SPACE_KEY:
         raise ValueError(
             "CONFLUENCE_SPACE_KEY not set"
         )
-
+    print("STARTING SYNC SCRIPT")
     connector = ConfluenceConnector(
         base_url=BASE_URL,
         username=USERNAME,
@@ -75,4 +75,6 @@ def main():
 
         page_id = page["id"]
 
+if __name__ == "__main__":
+    main()
         
