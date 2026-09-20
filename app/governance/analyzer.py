@@ -98,3 +98,96 @@ class KnowledgeAnalyzer:
                 seen[title] = True
 
         return duplicates
+
+    def missing_owners(self):
+
+        missing = []
+
+        for doc in self.catalog:
+
+            owner = (
+                doc.get(
+                    "owner",
+                    ""
+                )
+                .strip()
+            )
+
+            if not owner:
+
+                missing.append(
+                    doc["title"]
+                )
+
+        return missing   
+    def missing_descriptions(self):
+
+        missing = []
+
+        for doc in self.catalog:
+
+            description = (
+                doc.get(
+                    "description",
+                    ""
+                )
+                .strip()
+            )
+
+            if not description:
+
+                missing.append(
+                    doc["title"]
+                )
+
+        return missing     
+    def missing_tags(self):
+
+        missing = []
+
+        for doc in self.catalog:
+
+            tags = doc.get(
+                "tags",
+                []
+            )
+
+            if not tags:
+
+                missing.append(
+                    doc["title"]
+                )
+
+        return missing 
+
+    def quality_score(self):
+
+        total = len(
+            self.catalog
+        )
+
+        if total == 0:
+            return 0
+
+        issues = 0
+
+        issues += len(
+            self.missing_owners()
+        )
+
+        issues += len(
+            self.missing_descriptions()
+        )
+
+        issues += len(
+            self.missing_tags()
+        )
+
+        score = (
+            (total * 3) - issues
+        ) / (total * 3)
+
+        return round(
+            score * 100,
+            2
+        )      
