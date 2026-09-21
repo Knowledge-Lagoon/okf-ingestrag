@@ -3,6 +3,13 @@ import json
 
 class RelationshipGraph:
 
+    IGNORED_TAGS = {
+        "git",
+        "confluence",
+        "imported",
+        "manual"
+    }
+
     def __init__(
         self,
         catalog_file="catalog/index.json"
@@ -16,42 +23,58 @@ class RelationshipGraph:
 
             self.catalog = json.load(f)
 
+    def _clean_tags(
+        self,
+        tags
+    ):
+
+        return {
+            tag.lower()
+            for tag in tags
+            if tag.lower()
+            not in self.IGNORED_TAGS
+        }
+
     def build(self):
 
         graph = {}
 
         for doc in self.catalog:
 
-            title = doc.get(
-                "title",
-                ""
-            )
+            title = doc["title"]
 
-            tags = doc.get(
-                "tags",
-                []
+            source_tags = self._clean_tags(
+                doc.get(
+                    "tags",
+                    []
+                )
             )
 
             graph[title] = {
                 "related": []
             }
 
-            for other_doc in self.catalog:
+            for other in self.catalog:
 
-                if title == other_doc[
-                    "title"
-                ]:
+                if (
+                    other["title"]
+                    == title
+                ):
                     continue
 
-                common_tags = (
-                    set(tags)
-                    &
-                    set(
-                        other_doc.get(
+                target_tags = (
+                    self._clean_tags(
+                        other.get(
                             "tags",
                             []
                         )
                     )
+                )
+
+                common_tags = (
+                    source_tags
+                    &
+                    target_tags
                 )
 
                 if common_tags:
@@ -63,14 +86,34 @@ class RelationshipGraph:
                     ].append(
                         {
                             "document":
-                            other_doc[
+                            other[
                                 "title"
                             ],
-                            "common_tags":
-                            list(
+                            "score":
+                            len(
                                 common_tags
+                            ),
+                            "common_tags":
+                            sorted(
+                                list(
+                                    common_tags
+                                )
                             )
                         }
                     )
+
+            graph[
+                title
+            ][
+                "related"
+            ] = sorted(
+                graph[title][
+                    "related"
+                ],
+                key=lambda x: (
+                    x["score"]
+                ),
+                reverse=True
+            )
 
         return graph
