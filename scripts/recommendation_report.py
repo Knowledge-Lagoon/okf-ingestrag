@@ -1,3 +1,5 @@
+print("STARTING RECOMMENDATION REPORT")
+
 import sys
 from pathlib import Path
 
@@ -18,18 +20,30 @@ from app.recommendations.recommendation_engine import (
 
 def main():
 
-    document = (
-        "Kong Restart"
+    document = "Kong Restart"
+
+    print("\nCreating Recommendation Engine...")
+
+    engine = RecommendationEngine()
+
+    print(
+        f"\nPrimary Document: "
+        f"{document}"
     )
 
-    engine = (
-        RecommendationEngine()
+    print(
+        "\nGetting recommendations..."
     )
 
     recommendations = (
         engine.recommend(
             document
         )
+    )
+
+    print(
+        f"\nRecommendations Found: "
+        f"{len(recommendations)}"
     )
 
     print(
@@ -40,26 +54,24 @@ def main():
         "=" * 50
     )
 
-    print(
-        f"\nPrimary Document:"
-    )
-
-    print(
-        f"{document}"
-    )
-
-    print(
-        "\nRecommended Knowledge"
-    )
-
-    print(
-        "-" * 30
-    )
-
     if not recommendations:
 
         print(
-            "No recommendations found"
+            "\nNo recommendations found."
+        )
+
+        print(
+            "\nPossible reasons:"
+        )
+
+        print(
+            "- relationship_graph.json "
+            "contains no relationships"
+        )
+
+        print(
+            "- document title does "
+            "not exist in graph"
         )
 
         return
@@ -67,15 +79,24 @@ def main():
     for item in recommendations:
 
         print(
-            f"- {item['document']}"
+            f"\nDocument: "
+            f"{item.get('document')}"
         )
 
         print(
-            f"  Score: "
-            f"{item['score']}"
+            f"Score: "
+            f"{item.get('score', 0)}"
         )
 
         print(
-            f"  Tags: "
-            f"{', '.join(item['common_tags'])}"
+            f"Shared Tags: "
+            f"{', '.join(item.get('common_tags', []))}"
         )
+
+    print(
+        "\nRecommendation Report Complete"
+    )
+
+
+if __name__ == "__main__":
+    main()
