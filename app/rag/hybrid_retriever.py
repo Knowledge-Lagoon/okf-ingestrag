@@ -2,10 +2,6 @@ from app.rag.evidence_package import (
     EvidencePackage
 )
 
-from app.rag.retriever import (
-    SemanticRetriever
-)
-
 from app.search.engine import (
     SearchEngine
 )
@@ -21,10 +17,6 @@ class HybridRetriever:
 
         self.search_engine = (
             SearchEngine()
-        )
-
-        self.semantic_retriever = (
-            SemanticRetriever()
         )
 
         self.graph = (
@@ -49,19 +41,9 @@ class HybridRetriever:
         #
         # Vector Search
         #
-        try:
-
-            vector_results = (
-                self.semantic_retriever
-                .retrieve(
-                    question,
-                    limit=5
-                )
-            )
-
-        except Exception:
-
-            vector_results = []
+        # Disabled in v1.1.0
+        #
+        vector_results = []
 
         #
         # Graph Expansion
@@ -78,13 +60,16 @@ class HybridRetriever:
                 "title"
             )
 
-            if title:
+            if (
+                title
+                and
+                title in self.graph
+            ):
 
                 graph_results = (
-                    self.graph.get(
-                        title,
-                        {}
-                    ).get(
+                    self.graph[
+                        title
+                    ].get(
                         "related",
                         []
                     )
@@ -102,5 +87,8 @@ class HybridRetriever:
                 vector_results,
 
             graph_results=
+                graph_results,
+
+            recommendations=
                 graph_results
         )
