@@ -1,0 +1,42 @@
+---
+type: runbook
+title: Imagepullbackoff
+description: Imported from Confluence
+tags:
+  - confluence
+  - imported
+owner: confluence-import
+source: confluence
+version: 1.0
+---
+
+<h1>ImagePullBackOff</h1>
+<pre>Runbook Title: Container Image Retrieval Failure - Image Pull Back Off Resolution Guide
+
+Symptoms: Deployment fails with the error &quot;ImagePullBackOff&quot;. This often indicates that Kubernetes cannot find or pull a required container image for deployment, resulting in service disruption. The affected services may become unavailable to end-users and could potentially impact business operations if not resolved promptly.
+
+Business Impact: Dependent on the role of the failed containers within your infrastructure; this issue can lead to downtime or degraded performance affecting customer experience, revenue loss, or missed service level objectives (SLOs). The time taken to resolve and restore services is critical. 
+
+Root Cause: Image not found - This could be due to expired credentials, network issues preventing access to the image registry, incorrect repository URL specified in your Kubernetes manifest files, etc.  
+
+Resolution Steps: Follow this sequential guide aimed at isolating and resolving common causes of &quot;ImagePullBackOff&quot;: 
+1) Verify that necessary Docker credentials (if using a private registry requiring authentication) are valid by logging into the repository with an account capable of pulling images. Example command for authenticated repositories is: `docker login`. For non-authenticated public registries, ensure access rights haven't changed or expired and try refreshing them if necessary.
+2) Confirm that Docker daemon has network connectivity to your image repository by testing a direct pull from outside the cluster (e.g., using `docker pull `). Ensure you have sufficient privileges within Kubernetes to access images directly too, as needed in some setups for debugging purposes. 
+3) Validate that all manifest files specifying required container images contain correct and reachable repository URLs along with appropriate tags where the desired image is located (e.g., &quot;repo_name:tag&quot;). Utilize tools like `kubectl`, `oc` or other orchestration tool commands to inspect deployment/statefulset configurations for discrepancies that may lead to unsuccessful pulls, such as typos in the repository name or incorrect image references.
+4) Check if any recent changes were made related to registry access policies which could have restricted previously allowed operations (e.g., network restrictions via firewall rules on servers hosting registries). Validate with your infrastructure team that no such policy-related issues arose recently and adjust as required, where permissible within security constraints. 
+5) Review Kubernetes resource status in the &quot;Events&quot; tab of a failed pod/deployment to identify specific error messages or logs which might provide additional context for this issue beyond simply 'ImagePullBackOff'.  
+6) As an ultimate troubleshooting step, run `kubectl describe` on your Deployment and see if there are any issues with image pulls in progress that could be blocking the deployment. If found, use `kubectl delete pod/deployment`. After resolving these transient states or conflicts (if identified), retry to deploy using clean resources by applying manifest files after ensuring all referenced images successfully exist and can be pulled from your configured repositories without any issues as per step 1-4.
+7) Once the image retrieval issue is resolved, plan for a more permanent fix like automating credential rotation or setting up proper error handling within Kubernetes pods/deployments to avoid such incidents in future deployments when credentials might be close to expiring without notice and retry logic fails silently.
+8) Re-apply the deployment manifest files after resolving all issues from steps 1 through 7, then monitor service status using `kubectl get` or other relevant orchestration tool commands until normal operation is restored for end users/customers with minimal business impact.
+
+Validation Checks: Successful image retrieval and application of the deployment manifest files without errors are expected confirmations that your infrastructure can recover from such issues in future, preventing prolonged service disru09 
+
+Escalation Path: If none of these steps resolve the issue - consider seeking assistance with this error message by raising a support ticket through Kubernetes/Cloud provider's helpdesk or contacting relevant DevOps team. Provide them details on all performed resolution attempts and any logs, events, etc., which could aid in identifying underlying causes beyond your control for credential expiry times that may be affected at the image registry level (e.g., third-party managed registries).
+
+References: Docker documentation regarding troubleshooting Kubernetes issues with images retrieval can provide further insights into common pitfalls and best practices when dealing with such situations in containerized environments where your infrastructure likely resides or interacts heavily, e.g., https://docs.docker.com/engine/reference/commandline/pull/. 
+
+Kubernetes documentation on handling 'ImagePullBackOff' conditions can give further guidance tailored to the orchestration platform you are using and its specific configurations related to image pulling within deployments or pod lifecycles, e.g., https://kubernetes.io/docs/reference/command-line-tools-api/#pods---read
+
+RCA Report: The RCA report encapsulates the investigation carried out above into understanding why Kubernetes was unable to pull a required container image leading up to this 'ImagePullBackOff' error state for deployment. It concludes with recommended actions based on identified root causes and resolution steps, which are documented in the runbook provided as part of your response content hereinabove under &quot;Runbook Title&quot;, from section &quot;Symptoms&quot; through &quot;Validation Checks&quot;. These include verifying credential validity, repository URLs within manifest files accuracy, network access to repositories considering possible policy changes or misconfigurations that might lead to the observed issue. Furthermore, reviewing service logs and pod events for additional insights into this 'ImagePullBackOff' is recommended if primary resolution steps do not restore normal operations; thereby enhancing understanding of infrastructure behavior during deployment failures like these in future occurrences too while providing a holistic approach to mitigate against such issues.
+
+</pre>
