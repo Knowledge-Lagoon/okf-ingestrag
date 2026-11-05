@@ -16,7 +16,7 @@ class OllamaService:
             host
             or os.getenv(
                 "OLLAMA_HOST",
-                "http://172.31.15.13:11434",
+                "http://localhost:11434",
             )
         ).rstrip("/")
 
