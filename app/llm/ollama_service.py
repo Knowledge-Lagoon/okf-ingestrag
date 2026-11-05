@@ -24,7 +24,7 @@ class OllamaService:
             model
             or os.getenv(
                 "OLLAMA_MODEL",
-                "phi3:mini",
+                "gemma3:1b",
             )
         )
 
