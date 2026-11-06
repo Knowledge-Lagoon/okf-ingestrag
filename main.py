@@ -270,7 +270,11 @@ def main():
         f"\nGrounded prompt length: "
         f"{len(prompt)} characters"
     )
-
+    print("\nEXACT PROMPT SENT TO GEMMA")
+    print("=" * 60)
+    print(prompt)
+    print("=" * 60)
+    
     # Step 10: Generate grounded response
     print(
         "\nGenerating grounded answer..."
